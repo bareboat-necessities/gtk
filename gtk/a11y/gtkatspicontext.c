@@ -1154,6 +1154,10 @@ gtk_at_spi_context_register_object (GtkAtSpiContext *self)
     }
 
   self->interfaces = g_variant_ref_sink (g_variant_builder_end (&interfaces));
+
+  GTK_NOTE (A11Y, g_message ("Registered %d interfaces on object path '%s'",
+                             self->n_registered_objects,
+                             self->context_path));
 }
 
 static void
@@ -1169,19 +1173,6 @@ gtk_at_spi_context_unregister_object (GtkAtSpiContext *self)
 }
 /* }}} */
 /* {{{ GObject boilerplate */
-static void
-gtk_at_spi_context_dispose (GObject *gobject)
-{
-  GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (gobject);
-  GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
-
-  gtk_at_spi_context_unregister_object (self);
-  gtk_atspi_disconnect_text_signals (accessible);
-  gtk_atspi_disconnect_selection_signals (accessible);
-
-  G_OBJECT_CLASS (gtk_at_spi_context_parent_class)->dispose (gobject);
-}
-
 static void
 gtk_at_spi_context_finalize (GObject *gobject)
 {
@@ -1236,28 +1227,9 @@ static void
 gtk_at_spi_context_constructed (GObject *gobject)
 {
   GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (gobject);
-  GdkDisplay *display;
+  GdkDisplay *display = gtk_at_context_get_display (GTK_AT_CONTEXT (self));
 
   g_assert (self->bus_address);
-
-  /* Every GTK application has a single root AT-SPI object, which
-   * handles all the global state, including the cache of accessible
-   * objects. We use the GdkDisplay to store it, so it's guaranteed
-   * to be unique per-display connection
-   */
-  display = gtk_at_context_get_display (GTK_AT_CONTEXT (self));
-  self->root =
-    g_object_get_data (G_OBJECT (display), "-gtk-atspi-root");
-
-  if (self->root == NULL)
-    {
-      self->root = gtk_at_spi_root_new (self->bus_address);
-      g_object_set_data_full (G_OBJECT (display), "-gtk-atspi-root",
-                              self->root,
-                              g_object_unref);
-    }
-
-  self->connection = gtk_at_spi_root_get_connection (self->root);
 
   /* We use the application's object path to build the path of each
    * accessible object exposed on the accessibility bus; the path is
@@ -1298,7 +1270,36 @@ gtk_at_spi_context_constructed (GObject *gobject)
   g_free (base_path);
   g_free (uuid);
 
-  GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
+  /* Every GTK application has a single root AT-SPI object, which
+   * handles all the global state, including the cache of accessible
+   * objects. We use the GdkDisplay to store it, so it's guaranteed
+   * to be unique per-display connection
+   */
+  self->root =
+    g_object_get_data (G_OBJECT (display), "-gtk-atspi-root");
+
+  if (self->root == NULL)
+    {
+      self->root = gtk_at_spi_root_new (self->bus_address);
+      gtk_at_spi_root_register (self->root);
+      g_object_set_data_full (G_OBJECT (display), "-gtk-atspi-root",
+                              self->root,
+                              g_object_unref);
+    }
+
+  G_OBJECT_CLASS (gtk_at_spi_context_parent_class)->constructed (gobject);
+}
+
+static void
+gtk_at_spi_context_realize (GtkATContext *context)
+{
+  GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (context);
+
+  GTK_NOTE (A11Y, g_message ("Realizing ATSPI context at '%s'", self->context_path));
+
+  self->connection = gtk_at_spi_root_get_connection (self->root);
+
+  GtkAccessible *accessible = gtk_at_context_get_accessible (context);
   gtk_atspi_connect_text_signals (accessible,
                                   (GtkAtspiTextChangedCallback *)emit_text_changed,
                                   (GtkAtspiTextSelectionCallback *)emit_text_selection_changed,
@@ -1307,8 +1308,19 @@ gtk_at_spi_context_constructed (GObject *gobject)
                                        (GtkAtspiSelectionCallback *)emit_selection_changed,
                                        self);
   gtk_at_spi_context_register_object (self);
+}
 
-  G_OBJECT_CLASS (gtk_at_spi_context_parent_class)->constructed (gobject);
+static void
+gtk_at_spi_context_unrealize (GtkATContext *context)
+{
+  GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (context);
+  GtkAccessible *accessible = gtk_at_context_get_accessible (context);
+
+  GTK_NOTE (A11Y, g_message ("Unrealizing ATSPI context at '%s'", self->context_path));
+
+  gtk_atspi_disconnect_text_signals (accessible);
+  gtk_atspi_disconnect_selection_signals (accessible);
+  gtk_at_spi_context_unregister_object (self);
 }
 
 static void
@@ -1321,8 +1333,9 @@ gtk_at_spi_context_class_init (GtkAtSpiContextClass *klass)
   gobject_class->set_property = gtk_at_spi_context_set_property;
   gobject_class->get_property = gtk_at_spi_context_get_property;
   gobject_class->finalize = gtk_at_spi_context_finalize;
-  gobject_class->dispose = gtk_at_spi_context_dispose;
 
+  context_class->realize = gtk_at_spi_context_realize;
+  context_class->unrealize = gtk_at_spi_context_unrealize;
   context_class->state_change = gtk_at_spi_context_state_change;
   context_class->platform_change = gtk_at_spi_context_platform_change;
   context_class->bounds_change = gtk_at_spi_context_bounds_change;

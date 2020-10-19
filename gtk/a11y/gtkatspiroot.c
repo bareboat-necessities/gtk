@@ -61,6 +61,7 @@ struct _GtkAtSpiRoot
   char *desktop_path;
 
   gint32 application_id;
+  guint register_id;
 
   GtkAtSpiCache *cache;
 
@@ -82,6 +83,8 @@ static void
 gtk_at_spi_root_finalize (GObject *gobject)
 {
   GtkAtSpiRoot *self = GTK_AT_SPI_ROOT (gobject);
+
+  g_clear_handle_id (&self->register_id, g_source_remove);
 
   g_free (self->bus_address);
   g_free (self->desktop_name);
@@ -441,9 +444,11 @@ on_registration_reply (GObject      *gobject,
   self->toplevels = gtk_window_get_toplevels ();
 }
 
-static void
-gtk_at_spi_root_register (GtkAtSpiRoot *self)
+static gboolean
+root_register (gpointer data)
 {
+  GtkAtSpiRoot *self = data;
+
   /* Register the root element; every application has a single root, so we only
    * need to do this once.
    *
@@ -499,6 +504,21 @@ gtk_at_spi_root_register (GtkAtSpiRoot *self)
                           NULL,
                           on_registration_reply,
                           self);
+
+  return G_SOURCE_REMOVE;
+}
+
+void
+gtk_at_spi_root_register (GtkAtSpiRoot *self)
+{
+  if (self->register_id != 0)
+    return;
+
+  if (self->cache != NULL)
+    return;
+
+  self->register_id = g_idle_add (root_register, self);
+  g_source_set_name_by_id (self->register_id, "[gtk] ATSPI root registration");
 }
 
 static void

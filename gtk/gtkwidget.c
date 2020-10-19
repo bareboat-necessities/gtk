@@ -818,6 +818,7 @@ static void
 gtk_widget_real_root (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GtkATContext *context;
   GList *l;
 
   gtk_widget_forall (widget, (GtkCallback) gtk_widget_root, NULL);
@@ -827,6 +828,10 @@ gtk_widget_real_root (GtkWidget *widget)
       if (GTK_IS_SHORTCUT_CONTROLLER (l->data))
         gtk_shortcut_controller_root (GTK_SHORTCUT_CONTROLLER (l->data));
     }
+
+  context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (widget));
+  if (context != NULL)
+    gtk_at_context_realize (context);
 }
 
 static void
@@ -834,6 +839,9 @@ gtk_widget_real_unroot (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GList *l;
+
+  if (priv->at_context != NULL)
+    gtk_at_context_unrealize (priv->at_context);
 
   for (l = priv->event_controllers; l; l = l->next)
     {
