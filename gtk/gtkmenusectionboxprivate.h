@@ -45,6 +45,10 @@ void                    gtk_menu_section_box_new_toplevel               (GtkPopo
                                                                          GMenuModel          *model,
                                                                          GtkPopoverMenuFlags  flags);
 
+gboolean                gtk_menu_section_box_add_custom                 (GtkPopoverMenu *popover,
+                                                                         GtkWidget      *child,
+                                                                         const char     *id);
+
 G_END_DECLS
 
 #endif /* __GTK_MENU_SECTION_BOX_PRIVATE_H__ */

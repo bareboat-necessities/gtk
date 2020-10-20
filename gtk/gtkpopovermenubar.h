@@ -47,6 +47,11 @@ void         gtk_popover_menu_bar_set_menu_model (GtkPopoverMenuBar *bar,
 GDK_AVAILABLE_IN_ALL
 GMenuModel * gtk_popover_menu_bar_get_menu_model (GtkPopoverMenuBar *bar);
 
+GDK_AVAILABLE_IN_ALL
+gboolean     gtk_popover_menu_bar_add_child      (GtkPopoverMenuBar *bar,
+                                                  GtkWidget         *child,
+                                                  const char        *id);
+
 G_END_DECLS
 
 
