@@ -698,6 +698,9 @@ gtk_menu_section_box_add_custom (GtkPopoverMenu *popover,
   if (slot == NULL)
     return FALSE;
 
+  if (gtk_widget_get_first_child (slot))
+    return FALSE;
+
   gtk_widget_insert_before (child, slot, NULL);
   return TRUE;
 }
