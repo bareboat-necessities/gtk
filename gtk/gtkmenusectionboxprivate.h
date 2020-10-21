@@ -49,6 +49,9 @@ gboolean                gtk_menu_section_box_add_custom                 (GtkPopo
                                                                          GtkWidget      *child,
                                                                          const char     *id);
 
+gboolean                gtk_menu_section_box_remove_custom              (GtkPopoverMenu *popover,
+                                                                         GtkWidget      *child);
+
 G_END_DECLS
 
 #endif /* __GTK_MENU_SECTION_BOX_PRIVATE_H__ */

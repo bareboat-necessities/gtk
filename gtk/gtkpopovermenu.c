@@ -742,3 +742,24 @@ gtk_popover_menu_add_child (GtkPopoverMenu *popover,
 
   return gtk_menu_section_box_add_custom (popover, child, id);
 }
+
+/**
+ * gtk_popover_menu_remove_child:
+ * @popover: a #GtkPopoverMenu
+ * @child: the #GtkWidget to remove
+ *
+ * Removes a widget that has previously been added with
+ * gtk_popover_menu_add_child().
+ *
+ * Returns: %TRUE if the widget was removed
+ */
+gboolean
+gtk_popover_menu_remove_child (GtkPopoverMenu *popover,
+                               GtkWidget      *child)
+{
+
+  g_return_val_if_fail (GTK_IS_POPOVER_MENU (popover), FALSE);
+  g_return_val_if_fail (GTK_IS_WIDGET (child), FALSE);
+
+  return gtk_menu_section_box_remove_custom (popover, child);
+}

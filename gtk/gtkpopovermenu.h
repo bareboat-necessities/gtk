@@ -66,6 +66,10 @@ gboolean    gtk_popover_menu_add_child (GtkPopoverMenu *popover,
                                         GtkWidget      *child,
                                         const char     *id);
 
+GDK_AVAILABLE_IN_ALL
+gboolean    gtk_popover_menu_remove_child (GtkPopoverMenu *popover,
+                                           GtkWidget      *child);
+
 G_END_DECLS
 
 #endif /* __GTK_POPOVER_MENU_H__ */

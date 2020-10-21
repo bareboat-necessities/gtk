@@ -732,3 +732,35 @@ gtk_popover_menu_bar_add_child (GtkPopoverMenuBar *bar,
   return FALSE;
 }
 
+/**
+ * gtk_popover_menu_bar_remove_child:
+ * @bar: a #GtkPopoverMenuBar
+ * @child: the #GtkWidget to remove
+ *
+ * Removes a widget that has previously been added with
+ * gtk_popover_menu_bar_add_child().
+ *
+ * Returns: %TRUE if the widget was removed
+ */
+gboolean
+gtk_popover_menu_bar_remove_child (GtkPopoverMenuBar *bar,
+                                   GtkWidget         *child)
+{
+  GtkWidget *item;
+
+  g_return_val_if_fail (GTK_IS_POPOVER_MENU_BAR (bar), FALSE);
+  g_return_val_if_fail (GTK_IS_WIDGET (child), FALSE);
+
+  for (item = gtk_widget_get_first_child (GTK_WIDGET (bar));
+       item;
+       item = gtk_widget_get_next_sibling (item))
+    {
+      GtkPopover *popover = GTK_POPOVER_MENU_BAR_ITEM (item)->popover;
+
+      if (gtk_popover_menu_remove_child (GTK_POPOVER_MENU (popover), child))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+

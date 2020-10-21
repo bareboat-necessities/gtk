@@ -708,3 +708,30 @@ gtk_menu_section_box_add_custom (GtkPopoverMenu *popover,
   gtk_widget_insert_before (child, slot, NULL);
   return TRUE;
 }
+
+gboolean
+gtk_menu_section_box_remove_custom (GtkPopoverMenu *popover,
+                                    GtkWidget      *child)
+{
+  GtkWidget *stack;
+  GtkMenuSectionBox *box;
+  GtkWidget *parent;
+  const char *id;
+  GtkWidget *slot;
+
+  stack = gtk_popover_get_child (GTK_POPOVER (popover));
+  box = GTK_MENU_SECTION_BOX (gtk_stack_get_child_by_name (GTK_STACK (stack), "main"));
+  parent = gtk_widget_get_parent (child);
+
+  id = (const char *) g_object_get_data (G_OBJECT (parent), "slot-id");
+  g_return_val_if_fail (id != NULL, FALSE);
+
+  slot = (GtkWidget *)g_hash_table_lookup (box->custom_slots, id);
+
+  if (slot == NULL)
+    return FALSE;
+
+  gtk_widget_unparent (child);
+
+  return TRUE;
+}
