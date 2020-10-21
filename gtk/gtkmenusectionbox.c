@@ -354,7 +354,11 @@ gtk_menu_section_box_insert_func (GtkMenuTrackerItem *item,
       if (g_hash_table_lookup (box->custom_slots, id))
         g_warning ("Duplicate custom ID: %s", id);
       else
-        g_hash_table_insert (box->custom_slots, g_strdup (id), widget);
+        {
+          char *slot_id = g_strdup (id);
+          g_object_set_data_full (G_OBJECT (widget), "slot-id", slot_id, g_free);
+          g_hash_table_insert (box->custom_slots, slot_id, widget);
+        }
     }
   else
     {
@@ -517,7 +521,7 @@ gtk_menu_section_box_new_toplevel (GtkPopoverMenu      *popover,
 
   box = g_object_new (GTK_TYPE_MENU_SECTION_BOX, NULL);
   box->indicators = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-  box->custom_slots = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+  box->custom_slots = g_hash_table_new (g_str_hash, g_str_equal);
   box->flags = flags;
 
   gtk_popover_menu_add_submenu (popover, GTK_WIDGET (box), "main");
