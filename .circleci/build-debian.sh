@@ -51,7 +51,29 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install dh-exec mes
     libxrandr-dev                     \
     wayland-protocols                 \
     libatk1.0-doc                     \
-    libpango1.0-doc
+    libpango1.0-doc                   \
+    adwaita-icon-theme                \
+    dh-sequence-gir                   \
+    fonts-cantarell                   \
+    gnome-pkg-tools                   \
+    gobject-introspection             \
+    gsettings-desktop-schemas         \
+    gtk-doc-tools                     \
+    libcolord-dev                     \
+    libcups2-dev                      \
+    libgdk-pixbuf2.0-dev              \
+    libgirepository1.0-dev            \
+    libjson-glib-dev                  \
+    librest-dev                       \
+    librsvg2-common                   \
+    libxkbfile-dev                    \
+    sassc                             \
+    xauth                             \
+    xvfb                              \
+    docbook-xml                       \
+    docbook-xsl                       \
+    libcairo2-doc                     \
+    xsltproc
 
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
     "cd ci-source; dpkg-buildpackage -b -uc -us; mkdir dist; mv ../*.deb dist; chmod -R a+rw dist"
