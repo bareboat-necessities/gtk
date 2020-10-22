@@ -1,3 +1,10 @@
+gtk+3.0 (3.24.24a-1) buster; urgency=medium
+
+  * BBN
+    - debian pkg
+
+  -- mgrouch <mgrouch@users.github.com>  Thu, 22 Oct 2020 14:29:14 -0400
+
 gtk+3.0 (3.24.23-2) unstable; urgency=medium
 
   * Regenerate CSS themes with sassc during the build.
