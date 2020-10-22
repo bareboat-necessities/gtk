@@ -77,19 +77,18 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install dh-exec mes
 
 GDK_PIX_VER="2.40.0+dfsg-5"
 
-eval `dpkg-architecture`
-
-wget https://dl.cloudsmith.io/public/bbn-projects/bbn-repo/deb/raspbian/pool/buster/main/l/li/libgdk-pixbuf2.0-bin_${GDK_PIX_VER}_${DEB_TARGET_ARCH}.deb
-wget https://dl.cloudsmith.io/public/bbn-projects/bbn-repo/deb/raspbian/pool/buster/main/l/li/libgdk-pixbuf2.0-common_${GDK_PIX_VER}_all.deb
-wget https://dl.cloudsmith.io/public/bbn-projects/bbn-repo/deb/raspbian/pool/buster/main/l/li/libgdk-pixbuf2.0-0_${GDK_PIX_VER}_${DEB_TARGET_ARCH}.deb
-wget https://dl.cloudsmith.io/public/bbn-projects/bbn-repo/deb/raspbian/pool/buster/main/g/gi/gir1.2-gdkpixbuf-2.0_${GDK_PIX_VER}_${DEB_TARGET_ARCH}.deb
-wget https://dl.cloudsmith.io/public/bbn-projects/bbn-repo/deb/raspbian/pool/buster/main/l/li/libgdk-pixbuf2.0-dev_${GDK_PIX_VER}_${DEB_TARGET_ARCH}.deb
-
-sudo dpkg -i libgdk-pixbuf2.0-bin_2.40.0+dfsg-5_*.deb
-sudo dpkg -i libgdk-pixbuf2.0-common_2.40.0+dfsg-5_all.deb
-sudo dpkg -i libgdk-pixbuf2.0-0_2.40.0+dfsg-5_*.deb
-sudo dpkg -i gir1.2-gdkpixbuf-2.0_2.40.0+dfsg-5_*.deb
-sudo dpkg -i libgdk-pixbuf2.0-dev_2.40.0+dfsg-5_*.deb
+docker exec --privileged -ti $DOCKER_CONTAINER_ID \
+    eval `dpkg-architecture`; \
+    wget https://dl.cloudsmith.io/public/bbn-projects/bbn-repo/deb/raspbian/pool/buster/main/l/li/libgdk-pixbuf2.0-bin_${GDK_PIX_VER}_${DEB_TARGET_ARCH}.deb; \
+    wget https://dl.cloudsmith.io/public/bbn-projects/bbn-repo/deb/raspbian/pool/buster/main/l/li/libgdk-pixbuf2.0-common_${GDK_PIX_VER}_all.deb; \
+    wget https://dl.cloudsmith.io/public/bbn-projects/bbn-repo/deb/raspbian/pool/buster/main/l/li/libgdk-pixbuf2.0-0_${GDK_PIX_VER}_${DEB_TARGET_ARCH}.deb; \
+    wget https://dl.cloudsmith.io/public/bbn-projects/bbn-repo/deb/raspbian/pool/buster/main/g/gi/gir1.2-gdkpixbuf-2.0_${GDK_PIX_VER}_${DEB_TARGET_ARCH}.deb; \
+    wget https://dl.cloudsmith.io/public/bbn-projects/bbn-repo/deb/raspbian/pool/buster/main/l/li/libgdk-pixbuf2.0-dev_${GDK_PIX_VER}_${DEB_TARGET_ARCH}.deb; \
+    dpkg -i libgdk-pixbuf2.0-bin_${GDK_PIX_VER}_${DEB_TARGET_ARCH}.deb; \
+    dpkg -i libgdk-pixbuf2.0-${GDK_PIX_VER}_all.deb; \
+    dpkg -i libgdk-pixbuf2.0-0_${GDK_PIX_VER}_${DEB_TARGET_ARCH}.deb; \
+    dpkg -i gir1.2-gdkpixbuf-2.0_${GDK_PIX_VER}_${DEB_TARGET_ARCH}.deb; \
+    dpkg -i libgdk-pixbuf2.0-dev_${GDK_PIX_VER}_${DEB_TARGET_ARCH}.deb
 
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
     "cd ci-source; dpkg-buildpackage -b -uc -us; mkdir dist; mv ../*.deb dist; chmod -R a+rw dist"
