@@ -79,7 +79,7 @@ GDK_PIX_VER="2.40.0+dfsg-5"
 PRG_REPO=bbn-projects/bbn-repo/deb/raspbian/pool/buster
 PKG_SRC=https://dl.cloudsmith.io/public/${PRG_REPO}/main
 
-docker exec --privileged -ti $DOCKER_CONTAINER_ID \
+docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
     eval \`dpkg-architecture\`; \
     wget ${PKG_SRC}/l/li/libgdk-pixbuf2.0-bin_${GDK_PIX_VER}_${DEB_TARGET_ARCH}.deb; \
     wget ${PKG_SRC}/l/li/libgdk-pixbuf2.0-common_${GDK_PIX_VER}_all.deb; \
