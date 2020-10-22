@@ -37,11 +37,13 @@ struct _GdkMacosGLContext
 {
   GdkGLContext parent_instance;
 
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  NSOpenGLContext *gl_context;
-  G_GNUC_END_IGNORE_DEPRECATIONS
+  guint is_attached : 1;
 
-  gboolean is_attached;
+  struct {
+    int width;
+    int height;
+    guint needed : 1;
+  } resize;
 };
 
 struct _GdkMacosGLContextClass
