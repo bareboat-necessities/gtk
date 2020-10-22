@@ -1114,8 +1114,16 @@ gdk_gl_context_make_current (GdkGLContext *context)
 
   if (gdk_display_make_gl_context_current (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context)), context))
     {
+      GdkGLContext *last = g_private_get (&thread_current_context);
+
+      if (last)
+        g_object_ref (last);
+
       g_private_replace (&thread_current_context, g_object_ref (context));
       gdk_gl_context_check_extensions (context);
+
+      if (last)
+        g_object_unref (last);
     }
 }
 
