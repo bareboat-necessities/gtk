@@ -76,7 +76,8 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install dh-exec mes
     xsltproc
 
 GDK_PIX_VER="2.40.0+dfsg-5"
-PKG_SRC=https://dl.cloudsmith.io/public/bbn-projects/bbn-repo/deb/raspbian/pool/buster/main
+PRG_REPO=bbn-projects/bbn-repo/deb/raspbian/pool/buster
+PKG_SRC=https://dl.cloudsmith.io/public/${PRG_REPO}/main
 
 docker exec --privileged -ti $DOCKER_CONTAINER_ID \
     eval \`dpkg-architecture\`; \
