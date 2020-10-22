@@ -76,14 +76,15 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install dh-exec mes
     xsltproc
 
 GDK_PIX_VER="2.40.0+dfsg-5"
+PKG_SRC=https://dl.cloudsmith.io/public/bbn-projects/bbn-repo/deb/raspbian/pool/buster/main
 
 docker exec --privileged -ti $DOCKER_CONTAINER_ID \
     eval `dpkg-architecture`; \
-    wget https://dl.cloudsmith.io/public/bbn-projects/bbn-repo/deb/raspbian/pool/buster/main/l/li/libgdk-pixbuf2.0-bin_${GDK_PIX_VER}_${DEB_TARGET_ARCH}.deb; \
-    wget https://dl.cloudsmith.io/public/bbn-projects/bbn-repo/deb/raspbian/pool/buster/main/l/li/libgdk-pixbuf2.0-common_${GDK_PIX_VER}_all.deb; \
-    wget https://dl.cloudsmith.io/public/bbn-projects/bbn-repo/deb/raspbian/pool/buster/main/l/li/libgdk-pixbuf2.0-0_${GDK_PIX_VER}_${DEB_TARGET_ARCH}.deb; \
-    wget https://dl.cloudsmith.io/public/bbn-projects/bbn-repo/deb/raspbian/pool/buster/main/g/gi/gir1.2-gdkpixbuf-2.0_${GDK_PIX_VER}_${DEB_TARGET_ARCH}.deb; \
-    wget https://dl.cloudsmith.io/public/bbn-projects/bbn-repo/deb/raspbian/pool/buster/main/l/li/libgdk-pixbuf2.0-dev_${GDK_PIX_VER}_${DEB_TARGET_ARCH}.deb; \
+    wget ${PKG_SRC}/l/li/libgdk-pixbuf2.0-bin_${GDK_PIX_VER}_${DEB_TARGET_ARCH}.deb; \
+    wget ${PKG_SRC}/l/li/libgdk-pixbuf2.0-common_${GDK_PIX_VER}_all.deb; \
+    wget ${PKG_SRC}/l/li/libgdk-pixbuf2.0-0_${GDK_PIX_VER}_${DEB_TARGET_ARCH}.deb; \
+    wget ${PKG_SRC}/g/gi/gir1.2-gdkpixbuf-2.0_${GDK_PIX_VER}_${DEB_TARGET_ARCH}.deb; \
+    wget ${PKG_SRC}/l/li/libgdk-pixbuf2.0-dev_${GDK_PIX_VER}_${DEB_TARGET_ARCH}.deb; \
     dpkg -i libgdk-pixbuf2.0-bin_${GDK_PIX_VER}_${DEB_TARGET_ARCH}.deb; \
     dpkg -i libgdk-pixbuf2.0-${GDK_PIX_VER}_all.deb; \
     dpkg -i libgdk-pixbuf2.0-0_${GDK_PIX_VER}_${DEB_TARGET_ARCH}.deb; \
