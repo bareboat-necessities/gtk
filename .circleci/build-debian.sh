@@ -27,7 +27,10 @@ docker run --privileged -d -ti -e "container=docker"  -v $WORK_DIR:rw $DOCKER_IM
 DOCKER_CONTAINER_ID=$(docker ps --last 4 | grep $CONTAINER_DISTRO | awk '{print $1}')
 
 docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get update
-docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install dh-exec meson cmake \
+docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install build-essential \
+    dh-exec                           \
+    meson                             \
+    cmake                             \
     bc                                \
     bison                             \
     flex                              \
