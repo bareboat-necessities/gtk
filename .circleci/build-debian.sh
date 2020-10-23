@@ -80,6 +80,10 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install build-essen
     docbook-xml                       \
     docbook-xsl                       \
     libcairo2-doc                     \
+    libc6                             \
+    libglib2.0-0                      \
+    libjson-glib-1.0-0                \
+    libxcomposite1                    \
     xsltproc
 #docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get upgrade
 
