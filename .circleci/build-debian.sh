@@ -81,7 +81,7 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install build-essen
     docbook-xsl                       \
     libcairo2-doc                     \
     xsltproc
-docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get upgrade
+#docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get upgrade
 
 GDK_PIX_VER="2.40.0+dfsg-5"
 PKG_SRC=https://dl.cloudsmith.io/public/${PRG_REPO}/main
