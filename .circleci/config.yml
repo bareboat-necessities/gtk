@@ -11,7 +11,7 @@ commands:
   git-checkout:
     steps:
       - run: git clone -b "debian/3.24.23-2" https://salsa.debian.org/gnome-team/gtk3.git .
-      - run: wget -nc -O - https://github.com/bareboat-necessities/gtk3/archive/gtk-3-24.tar.gz | gzip -cd - | tar xvf - ; mv *-gtk-3-24/.circleci .
+      - run: wget -nc -O - https://github.com/bareboat-necessities/gtk/archive/gtk-3-24.tar.gz | gzip -cd - | tar xvf - ; mv *-gtk-3-24/.circleci .
   build-n-publish-debian:
     steps:
       - run: sudo apt-get -y install debhelper
