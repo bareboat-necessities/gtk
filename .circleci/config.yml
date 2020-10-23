@@ -39,7 +39,7 @@ jobs:
       - CONTAINER_DISTRO=debian:buster
       - PKG_TYPE=deb
       - PKG_DISTRO=debian/buster
-      - PKG_ARCH=armfh
+      - PKG_ARCH=armhf
       - EMU=on
     steps:
       - build-n-publish-debian
