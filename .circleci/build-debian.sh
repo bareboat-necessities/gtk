@@ -28,6 +28,10 @@ DOCKER_CONTAINER_ID=$(docker ps --last 4 | grep $CONTAINER_DISTRO | awk '{print 
 
 docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get update
 docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install dh-exec meson cmake \
+    bc                                \
+    bison                             \
+    flex                              \
+    at-spi2-core                      \
     libglib2.0-doc                    \
     libatk-bridge2.0-dev              \
     libatk1.0-dev                     \
