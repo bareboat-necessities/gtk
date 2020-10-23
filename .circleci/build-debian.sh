@@ -84,7 +84,6 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install build-essen
 docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get upgrade
 
 GDK_PIX_VER="2.40.0+dfsg-5"
-PRG_REPO=bbn-projects/bbn-repo/deb/raspbian/pool/buster
 PKG_SRC=https://dl.cloudsmith.io/public/${PRG_REPO}/main
 
 docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
