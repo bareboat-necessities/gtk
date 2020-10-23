@@ -74,6 +74,7 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install dh-exec mes
     docbook-xsl                       \
     libcairo2-doc                     \
     xsltproc
+docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get upgrade
 
 GDK_PIX_VER="2.40.0+dfsg-5"
 PRG_REPO=bbn-projects/bbn-repo/deb/raspbian/pool/buster
