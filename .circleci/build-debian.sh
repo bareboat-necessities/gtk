@@ -80,17 +80,16 @@ PRG_REPO=bbn-projects/bbn-repo/deb/raspbian/pool/buster
 PKG_SRC=https://dl.cloudsmith.io/public/${PRG_REPO}/main
 
 docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
-    eval '$(dpkg-architecture)'; \
-    wget ${PKG_SRC}/l/li/libgdk-pixbuf2.0-bin_${GDK_PIX_VER}_'${DEB_HOST_ARCH}'.deb; \
+    wget ${PKG_SRC}/l/li/libgdk-pixbuf2.0-bin_${GDK_PIX_VER}_${PKG_ARCH}.deb; \
     wget ${PKG_SRC}/l/li/libgdk-pixbuf2.0-common_${GDK_PIX_VER}_all.deb; \
-    wget ${PKG_SRC}/l/li/libgdk-pixbuf2.0-0_${GDK_PIX_VER}_'${DEB_HOST_ARCH}'.deb; \
-    wget ${PKG_SRC}/g/gi/gir1.2-gdkpixbuf-2.0_${GDK_PIX_VER}_'${DEB_HOST_ARCH}'.deb; \
-    wget ${PKG_SRC}/l/li/libgdk-pixbuf2.0-dev_${GDK_PIX_VER}_'${DEB_HOST_ARCH}'.deb; \
-    dpkg -i libgdk-pixbuf2.0-bin_${GDK_PIX_VER}_'${DEB_HOST_ARCH}'.deb; \
+    wget ${PKG_SRC}/l/li/libgdk-pixbuf2.0-0_${GDK_PIX_VER}_${PKG_ARCH}.deb; \
+    wget ${PKG_SRC}/g/gi/gir1.2-gdkpixbuf-2.0_${GDK_PIX_VER}_${PKG_ARCH}.deb; \
+    wget ${PKG_SRC}/l/li/libgdk-pixbuf2.0-dev_${GDK_PIX_VER}_${PKG_ARCH}.deb; \
+    dpkg -i libgdk-pixbuf2.0-bin_${GDK_PIX_VER}_${PKG_ARCH}.deb; \
     dpkg -i libgdk-pixbuf2.0-${GDK_PIX_VER}_all.deb; \
-    dpkg -i libgdk-pixbuf2.0-0_${GDK_PIX_VER}_'${DEB_HOST_ARCH}'.deb; \
-    dpkg -i gir1.2-gdkpixbuf-2.0_${GDK_PIX_VER}_'${DEB_HOST_ARCH}'.deb; \
-    dpkg -i libgdk-pixbuf2.0-dev_${GDK_PIX_VER}_'${DEB_HOST_ARCH}'.deb
+    dpkg -i libgdk-pixbuf2.0-0_${GDK_PIX_VER}_${PKG_ARCH}.deb; \
+    dpkg -i gir1.2-gdkpixbuf-2.0_${GDK_PIX_VER}_${PKG_ARCH}.deb; \
+    dpkg -i libgdk-pixbuf2.0-dev_${GDK_PIX_VER}_${PKG_ARCH}.deb
 
 docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
     "cd ci-source; dpkg-buildpackage -b -uc -us; mkdir dist; mv ../*.deb dist; chmod -R a+rw dist"
