@@ -87,11 +87,11 @@ GDK_PIX_VER="2.40.0+dfsg-5"
 PKG_SRC=https://dl.cloudsmith.io/public/${PRG_REPO}/main
 
 docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
-   "wget ${PKG_SRC}/l/li/libgdk-pixbuf2.0-bin_${GDK_PIX_VER}_${PKG_ARCH}.deb;
-    wget ${PKG_SRC}/l/li/libgdk-pixbuf2.0-common_${GDK_PIX_VER}_all.deb;
-    wget ${PKG_SRC}/l/li/libgdk-pixbuf2.0-0_${GDK_PIX_VER}_${PKG_ARCH}.deb;
-    wget ${PKG_SRC}/g/gi/gir1.2-gdkpixbuf-2.0_${GDK_PIX_VER}_${PKG_ARCH}.deb;
-    wget ${PKG_SRC}/l/li/libgdk-pixbuf2.0-dev_${GDK_PIX_VER}_${PKG_ARCH}.deb;
+   "wget http://http.us.debian.org/debian/pool/main/g/gdk-pixbuf/libgdk-pixbuf2.0-bin_${GDK_PIX_VER}_${PKG_ARCH}.deb;
+    wget http://http.us.debian.org/debian/pool/main/g/gdk-pixbuf/libgdk-pixbuf2.0-common_${GDK_PIX_VER}_all.deb;
+    wget http://http.us.debian.org/debian/pool/main/g/gdk-pixbuf/libgdk-pixbuf2.0-0_${GDK_PIX_VER}_${PKG_ARCH}.deb;
+    wget http://http.us.debian.org/debian/pool/main/g/gdk-pixbuf/gir1.2-gdkpixbuf-2.0_${GDK_PIX_VER}_${PKG_ARCH}.deb;
+    wget http://http.us.debian.org/debian/pool/main/g/gdk-pixbuf/libgdk-pixbuf2.0-dev_${GDK_PIX_VER}_${PKG_ARCH}.deb;
     dpkg -i libgdk-pixbuf2.0-bin_${GDK_PIX_VER}_${PKG_ARCH}.deb;
     dpkg -i libgdk-pixbuf2.0-common_${GDK_PIX_VER}_all.deb;
     dpkg -i libgdk-pixbuf2.0-0_${GDK_PIX_VER}_${PKG_ARCH}.deb;
