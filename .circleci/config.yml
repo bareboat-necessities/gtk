@@ -10,10 +10,7 @@ executors:
 commands:
   git-checkout:
     steps:
-      - run:
-          environment:
-            - GIT_OPTIONS=-b "debian/3.24.23-2" https://salsa.debian.org/gnome-team/gtk3.git
-          command: git clone ${GIT_OPTIONS}
+      - run: git clone -b "debian/3.24.23-2" https://salsa.debian.org/gnome-team/gtk3.git
   build-n-publish-debian:
     steps:
       - run: sudo apt-get -y install debhelper
