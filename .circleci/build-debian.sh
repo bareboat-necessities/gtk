@@ -15,19 +15,19 @@ sleep 5;
 
 if [ "$EMU" = "on" ]; then
   if [ "$CONTAINER_DISTRO" = "raspbian" ]; then
-      docker run --rm --privileged multiarch/qemu-user-static:register --reset
+      docker run --rm --privileged --cap-add=ALL multiarch/qemu-user-static:register --reset
   else
-      docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+      docker run --rm --privileged --cap-add=ALL multiarch/qemu-user-static --reset -p yes
   fi
 fi
 
 WORK_DIR=$(pwd):/ci-source
 
-docker run --privileged -d -ti -e "container=docker"  -v $WORK_DIR:rw $DOCKER_IMAGE /bin/bash
+docker run --privileged --cap-add=ALL -d -ti -e "container=docker"  -v $WORK_DIR:rw $DOCKER_IMAGE /bin/bash
 DOCKER_CONTAINER_ID=$(docker ps --last 4 | grep $CONTAINER_DISTRO | awk '{print $1}')
 
-docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get update
-docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install build-essential \
+docker exec --privileged --cap-add=ALL -ti $DOCKER_CONTAINER_ID apt-get update
+docker exec --privileged --cap-add=ALL -ti $DOCKER_CONTAINER_ID apt-get -y install build-essential \
     dh-exec                           \
     meson                             \
     cmake                             \
@@ -90,7 +90,7 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install build-essen
 GDK_PIX_VER="2.40.0+dfsg-5"
 PKG_SRC=https://dl.cloudsmith.io/public/${PRG_REPO}/main
 
-docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
+docker exec --privileged --cap-add=ALL -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
    "wget http://http.us.debian.org/debian/pool/main/g/gdk-pixbuf/libgdk-pixbuf2.0-bin_${GDK_PIX_VER}_${PKG_ARCH}.deb;
     wget http://http.us.debian.org/debian/pool/main/g/gdk-pixbuf/libgdk-pixbuf2.0-common_${GDK_PIX_VER}_all.deb;
     wget http://http.us.debian.org/debian/pool/main/g/gdk-pixbuf/libgdk-pixbuf2.0-0_${GDK_PIX_VER}_${PKG_ARCH}.deb;
@@ -102,7 +102,7 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
     dpkg -i gir1.2-gdkpixbuf-2.0_${GDK_PIX_VER}_${PKG_ARCH}.deb;
     dpkg -i libgdk-pixbuf2.0-dev_${GDK_PIX_VER}_${PKG_ARCH}.deb"
 
-docker exec -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
+docker exec --privileged --cap-add=ALL -ti --cap-add=ALL $DOCKER_CONTAINER_ID /bin/bash -xec \
     "cd ci-source; dpkg-buildpackage -b -uc -us; mkdir dist; mv ../*.deb dist; chmod -R a+rw dist"
 
 find dist -name \*.deb
