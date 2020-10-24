@@ -102,7 +102,7 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
     dpkg -i gir1.2-gdkpixbuf-2.0_${GDK_PIX_VER}_${PKG_ARCH}.deb;
     dpkg -i libgdk-pixbuf2.0-dev_${GDK_PIX_VER}_${PKG_ARCH}.deb"
 
-docker exec --privileged -ti --cap-add=ALL $DOCKER_CONTAINER_ID /bin/bash -xec \
+docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
     "cd ci-source; dpkg-buildpackage -b -uc -us; mkdir dist; mv ../*.deb dist; chmod -R a+rw dist"
 
 find dist -name \*.deb
