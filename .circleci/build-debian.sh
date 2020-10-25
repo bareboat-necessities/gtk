@@ -27,6 +27,13 @@ docker run --privileged --security-opt="seccomp=unconfined" --cap-add=ALL -d -ti
 DOCKER_CONTAINER_ID=$(docker ps --last 4 | grep $CONTAINER_DISTRO | awk '{print $1}')
 
 docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get update
+docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install apt-transport-https wget curl gnupg2
+
+docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
+  "wget -q 'https://dl.cloudsmith.io/public/bbn-projects/bbn-repo/cfg/gpg/gpg.070C975769B2A67A.key' -O- | apt-key add -"
+docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
+  "wget -q 'https://dl.cloudsmith.io/public/bbn-projects/bbn-repo/cfg/setup/config.deb.txt?distro=raspbian&codename=buster' -O- | tee -a /etc/apt/sources.list"
+
 docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install dpkg-dev debhelper devscripts equivs pkg-config apt-utils fakeroot
 docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install build-essential \
     dh-exec                           \
@@ -85,23 +92,12 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install build-essen
     libglib2.0-0                      \
     libjson-glib-1.0-0                \
     libxcomposite1                    \
+    libgdk-pixbuf2.0-dev              \
     xsltproc
 #docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y upgrade
 
 GDK_PIX_VER="2.40.0+dfsg-5"
 PKG_SRC=https://dl.cloudsmith.io/public/${PRG_REPO}/main
-
-docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
-   "wget http://http.us.debian.org/debian/pool/main/g/gdk-pixbuf/libgdk-pixbuf2.0-bin_${GDK_PIX_VER}_${PKG_ARCH}.deb;
-    wget http://http.us.debian.org/debian/pool/main/g/gdk-pixbuf/libgdk-pixbuf2.0-common_${GDK_PIX_VER}_all.deb;
-    wget http://http.us.debian.org/debian/pool/main/g/gdk-pixbuf/libgdk-pixbuf2.0-0_${GDK_PIX_VER}_${PKG_ARCH}.deb;
-    wget http://http.us.debian.org/debian/pool/main/g/gdk-pixbuf/gir1.2-gdkpixbuf-2.0_${GDK_PIX_VER}_${PKG_ARCH}.deb;
-    wget http://http.us.debian.org/debian/pool/main/g/gdk-pixbuf/libgdk-pixbuf2.0-dev_${GDK_PIX_VER}_${PKG_ARCH}.deb;
-    dpkg -i libgdk-pixbuf2.0-bin_${GDK_PIX_VER}_${PKG_ARCH}.deb;
-    dpkg -i libgdk-pixbuf2.0-common_${GDK_PIX_VER}_all.deb;
-    dpkg -i libgdk-pixbuf2.0-0_${GDK_PIX_VER}_${PKG_ARCH}.deb;
-    dpkg -i gir1.2-gdkpixbuf-2.0_${GDK_PIX_VER}_${PKG_ARCH}.deb;
-    dpkg -i libgdk-pixbuf2.0-dev_${GDK_PIX_VER}_${PKG_ARCH}.deb"
 
 docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
     "update-alternatives --set fakeroot /usr/bin/fakeroot-tcp; cd ci-source; dpkg-buildpackage -b -uc -us; mkdir dist; mv ../*.deb dist; chmod -R a+rw dist"
