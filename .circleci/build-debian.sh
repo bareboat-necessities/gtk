@@ -102,7 +102,7 @@ PKG_SRC=https://dl.cloudsmith.io/public/${PRG_REPO}/main
 docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
     "update-alternatives --set fakeroot /usr/bin/fakeroot-tcp; cd ci-source; dpkg-buildpackage -b -uc -us; mkdir dist; mv ../*.deb dist; chmod -R a+rw dist"
 
-find dist -name \*.deb
+find dist -name \*.$EXT
 
 echo "Stopping"
 docker ps -a
