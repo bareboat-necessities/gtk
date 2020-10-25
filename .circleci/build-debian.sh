@@ -27,6 +27,7 @@ docker run --privileged --security-opt="seccomp=unconfined" --cap-add=ALL -d -ti
 DOCKER_CONTAINER_ID=$(docker ps --last 4 | grep $CONTAINER_DISTRO | awk '{print $1}')
 
 docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get update
+docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install dpkg-dev debhelper devscripts equivs pkg-config apt-utils fakeroot
 docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install build-essential \
     dh-exec                           \
     meson                             \
@@ -103,7 +104,7 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
     dpkg -i libgdk-pixbuf2.0-dev_${GDK_PIX_VER}_${PKG_ARCH}.deb"
 
 docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
-    "cd ci-source; dpkg-buildpackage -b -uc -us; mkdir dist; mv ../*.deb dist; chmod -R a+rw dist"
+    "update-alternatives --set fakeroot /usr/bin/fakeroot-tcp; cd ci-source; dpkg-buildpackage -b -uc -us; mkdir dist; mv ../*.deb dist; chmod -R a+rw dist"
 
 find dist -name \*.deb
 
