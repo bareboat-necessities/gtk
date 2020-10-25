@@ -101,7 +101,7 @@ GDK_PIX_VER="2.40.0+dfsg-5"
 PKG_SRC=https://dl.cloudsmith.io/public/${PRG_REPO}/main
 
 docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
-    "update-alternatives --set fakeroot /usr/bin/fakeroot-tcp; cd ci-source; dpkg-buildpackage -b -uc -us; mkdir dist; mv ../*.deb dist; chmod -R a+rw dist"
+    "update-alternatives --set fakeroot /usr/bin/fakeroot-tcp; cd ci-source; dpkg-buildpackage -b -uc -us -j4; mkdir dist; mv ../*.deb dist; chmod -R a+rw dist"
 
 find dist -name \*.$EXT
 
