@@ -35,8 +35,11 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
   "wget -q 'https://dl.cloudsmith.io/public/bbn-projects/bbn-repo/cfg/setup/config.deb.txt?distro=${PKG_DISTRO}&codename=${PKG_RELEASE}' -O- | tee -a /etc/apt/sources.list"
 
 docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get update
-docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install libglib2.0-bin libglib2.0-dev-bin dpkg-dev debhelper devscripts equivs pkg-config apt-utils fakeroot
-docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install build-essential \
+
+docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install build-essential libglib2.0-0 libglib2.0-bin libglib2.0-dev-bin \
+   dpkg-dev debhelper devscripts equivs pkg-config apt-utils fakeroot
+
+docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install \
     dh-exec                           \
     meson                             \
     cmake                             \
@@ -90,10 +93,8 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install build-essen
     docbook-xsl                       \
     libcairo2-doc                     \
     libc6                             \
-    libglib2.0-0                      \
     libjson-glib-1.0-0                \
     libxcomposite1                    \
-    libgdk-pixbuf2.0-dev              \
     libgtk2.0                         \
     xsltproc
 #docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y upgrade
