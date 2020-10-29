@@ -94,6 +94,7 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install build-essen
     libjson-glib-1.0-0                \
     libxcomposite1                    \
     libgdk-pixbuf2.0-dev              \
+    libgtk2.0                         \
     xsltproc
 #docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y upgrade
 
