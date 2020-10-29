@@ -35,7 +35,7 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
   "wget -q 'https://dl.cloudsmith.io/public/bbn-projects/bbn-repo/cfg/setup/config.deb.txt?distro=${PKG_DISTRO}&codename=${PKG_RELEASE}' -O- | tee -a /etc/apt/sources.list"
 
 docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get update
-docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install dpkg-dev debhelper devscripts equivs pkg-config apt-utils fakeroot
+docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install libglib2.0-bin libglib2.0-dev-bin dpkg-dev debhelper devscripts equivs pkg-config apt-utils fakeroot
 docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install build-essential \
     dh-exec                           \
     meson                             \
