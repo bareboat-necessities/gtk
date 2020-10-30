@@ -91,8 +91,8 @@ jobs:
     environment:
       - DOCKER_IMAGE=arm32v7/debian:buster
       - CONTAINER_DISTRO=debian:buster
-      - PKG_RELEASE=raspbian
-      - PKG_DISTRO=buster
+      - PKG_RELEASE=buster
+      - PKG_DISTRO=raspbian
       - EMU=on
     steps:
       - do-all
@@ -101,8 +101,8 @@ jobs:
     environment:
       - DOCKER_IMAGE=arm64v8/debian:buster
       - CONTAINER_DISTRO=debian:buster
-      - PKG_RELEASE=raspbian
-      - PKG_DISTRO=buster
+      - PKG_RELEASE=buster
+      - PKG_DISTRO=raspbian
       - EMU=on
     steps:
       - do-all
