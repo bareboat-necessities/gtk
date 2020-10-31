@@ -7,6 +7,10 @@ executors:
     machine:
       enabled: true
       image: ubuntu-1604:202010-01
+  boot-linux2:
+    machine:
+      enabled: true
+      image: ubuntu-2004:202010-01
 commands:
   git-checkout:
     steps:
@@ -58,7 +62,7 @@ jobs:
     steps:
       - do-all
   build-debian-bullseye-arm64:
-    executor: boot-linux
+    executor: boot-linux2
     environment:
       - DOCKER_IMAGE=arm64v8/debian:bullseye
       - CONTAINER_DISTRO=debian:bullseye
@@ -68,7 +72,7 @@ jobs:
     steps:
       - do-all
   build-debian-bullseye-arm32:
-    executor: boot-linux
+    executor: boot-linux2
     environment:
       - DOCKER_IMAGE=arm32v7/debian:bullseye
       - CONTAINER_DISTRO=debian:bullseye
@@ -78,7 +82,7 @@ jobs:
     steps:
       - do-all
   build-debian-bullseye-amd64:
-    executor: boot-linux
+    executor: boot-linux2
     environment:
       - DOCKER_IMAGE=amd64/debian:bullseye
       - CONTAINER_DISTRO=debian:bullseye
