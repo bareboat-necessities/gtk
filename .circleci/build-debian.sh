@@ -95,6 +95,7 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install \
     libc6                             \
     libjson-glib-1.0-0                \
     libxcomposite1                    \
+    libgtk2.0                         \
     xsltproc
 #docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y upgrade
 
