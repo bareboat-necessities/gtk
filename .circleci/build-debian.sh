@@ -7,6 +7,8 @@
 # bailout on errors and echo commands.
 set -xe
 
+CIRCLE_STAGE=$1
+CPU_PLATF=${CIRCLE_STAGE:(-5)}
 DOCKER_SOCK="unix:///var/run/docker.sock"
 
 echo "DOCKER_OPTS=\"-H tcp://127.0.0.1:2375 -H $DOCKER_SOCK -s overlay2\"" | sudo tee /etc/default/docker > /dev/null
@@ -97,10 +99,16 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install \
     libxcomposite1                    \
     libgtk2.0                         \
     xsltproc
+
 #docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y upgrade
 
-docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
+if [ "arm32" = "$CPU_PLATF" ]; then
+  docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
+    "cd ci-source; DEB_BUILD_OPTIONS=\"noopts nodocs nocheck notest\" DEB_CXXFLAGS_SET=\"-g -O0\" DEB_CPPFLAGS_SET=\"-g -O0\" DEB_CFLAGS_SET=\"-g -O0\" dpkg-buildpackage -b -uc -us -j2; mkdir dist; mv ../*.deb dist; chmod -R a+rw dist"
+else
+  docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
     "update-alternatives --set fakeroot /usr/bin/fakeroot-tcp; cd ci-source; DEB_BUILD_OPTIONS=\"noopts nodocs nocheck notest\" DEB_CXXFLAGS_SET=\"-g -O0\" DEB_CPPFLAGS_SET=\"-g -O0\" DEB_CFLAGS_SET=\"-g -O0\" dpkg-buildpackage -b -uc -us -j2; mkdir dist; mv ../*.deb dist; chmod -R a+rw dist"
+fi
 
 find dist -name \*.$EXT
 

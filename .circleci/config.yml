@@ -22,7 +22,7 @@ commands:
       - run: chmod a+x .circleci/*.sh
       - run:
           command: |
-            .circleci/build-debian.sh
+            .circleci/build-debian.sh ${CIRCLE_STAGE}
           no_output_timeout: 60m
       - cloudsmith/ensure-api-key
       - cloudsmith/install-cli
@@ -43,7 +43,7 @@ jobs:
     steps:
       - do-all
   build-debian-buster-arm32:
-    executor: boot-linux
+    executor: boot-linux2
     environment:
       - DOCKER_IMAGE=arm32v7/debian:buster
       - CONTAINER_DISTRO=debian:buster
@@ -72,7 +72,7 @@ jobs:
     steps:
       - do-all
   build-debian-bullseye-arm32:
-    executor: boot-linux
+    executor: boot-linux2
     environment:
       - DOCKER_IMAGE=arm32v7/debian:bullseye
       - CONTAINER_DISTRO=debian:bullseye
@@ -91,7 +91,7 @@ jobs:
     steps:
       - do-all
   build-raspbian-buster-arm32:
-    executor: boot-linux
+    executor: boot-linux2
     environment:
       - DOCKER_IMAGE=arm32v7/debian:buster
       - CONTAINER_DISTRO=debian:buster
