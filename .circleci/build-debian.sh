@@ -103,6 +103,8 @@ docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y install \
     libxcomposite1                    \
     xsltproc
 
+docker exec --privileged -ti $DOCKER_CONTAINER_ID ldconfig
+
 #docker exec --privileged -ti $DOCKER_CONTAINER_ID apt-get -y upgrade
 
 docker exec --privileged -ti $DOCKER_CONTAINER_ID /bin/bash -xec \
